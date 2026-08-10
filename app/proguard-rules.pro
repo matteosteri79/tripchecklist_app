@@ -19,3 +19,18 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# Keep Room database classes
+-keep class androidx.room.** { *; }
+-keep interface androidx.room.** { *; }
+
+# Keep Gson serialized classes
+-keep class com.matteosteri.tripchecklist.data.** { *; }
+
+# Gson - keep generic signatures
+-keepattributes Signature
+
+# Gson classes
+-keep class com.google.gson.** { *; }
+
+# Keep app model classes used by Gson
+-keep class com.matteosteri.tripchecklist.data.preset.** { *; }
