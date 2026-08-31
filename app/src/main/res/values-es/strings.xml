@@ -45,4 +45,10 @@
     <string name="german">Deutsch</string>
     <string name="theme">Tema</string>
     <string name="choose_theme">Elegir tema</string>
+    <string name="donate_coffee">Invítame a un café</string>
+    <string name="donate_coffee_title">Invítame a un café</string>
+    <string name="donate_coffee_message">¿Te gusta Trip Checklist? Si la aplicación te resulta útil, puedes apoyar su desarrollo con una pequeña contribución.\n\n¡Gracias por tu apoyo!</string>
+    <string name="donate_coffee_button">Invítame a un café</string>
+    <string name="donate_banner_title">¿Te gusta Trip Checklist?</string>
+    <string name="donate_banner_message">Apoya el desarrollo de la aplicación</string>
 </resources>

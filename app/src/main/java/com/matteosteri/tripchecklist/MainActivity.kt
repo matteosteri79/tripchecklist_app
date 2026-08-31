@@ -39,6 +39,8 @@ import com.matteosteri.tripchecklist.data.preset.getVisiblePresets
 import com.matteosteri.tripchecklist.theme.AppTheme
 import com.matteosteri.tripchecklist.theme.ThemeManager
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -118,6 +120,7 @@ fun HomeScreen(
     var showPresetSheet by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
     var showPresetDialog by remember { mutableStateOf(false) }
+    var showDonateDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         floatingActionButton = {
@@ -161,7 +164,9 @@ fun HomeScreen(
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            AppHeader()
+            AppHeader(
+                onDonate = { showDonateDialog = true }
+            )
 
             Box(
                 modifier = Modifier.fillMaxSize()
@@ -172,7 +177,8 @@ fun HomeScreen(
                     ChecklistList(
                         checklists = checklists,
                         onDelete = { viewModel.deleteChecklist(it) },
-                        onClick = { navController.goToChecklist(it.id, it.name) }
+                        onClick = { navController.goToChecklist(it.id, it.name) },
+                        onDonate = { showDonateDialog = true }
                     )
                 }
             }
@@ -345,6 +351,49 @@ fun HomeScreen(
             }
         }
     }
+
+    // DIALOG DONATE
+    if (showDonateDialog) {
+        AlertDialog(
+            onDismissRequest = { showDonateDialog = false },
+            icon = { Text(text = "☕", fontSize = 32.sp) },
+            title = {
+                Text(text = stringResource(R.string.donate_coffee_title))
+            },
+            text = {
+                Text(text = stringResource(R.string.donate_coffee_message))
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showDonateDialog = false
+
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://ko-fi.com/appchecklist")
+                        )
+
+                        context.startActivity(intent)
+                    }
+                ) {
+                    Text(
+                        text = stringResource(R.string.donate_coffee_button)
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDonateDialog = false
+                    }
+                ) {
+                    Text(
+                        text = stringResource(R.string.cancel)
+                    )
+                }
+            }
+        )
+    }
 }
 
 
@@ -377,15 +426,16 @@ fun EmptyState() {
 }
 
 /* ---------------- LIST ---------------- */
-
-
 @Composable
 fun ChecklistList(
     checklists: List<ChecklistEntity>,
     onDelete: (ChecklistEntity) -> Unit,
-    onClick: (ChecklistEntity) -> Unit
+    onClick: (ChecklistEntity) -> Unit,
+    onDonate: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
         Text(
             text = stringResource(R.string.your_checklists),
             style = MaterialTheme.typography.titleLarge,
@@ -393,7 +443,9 @@ fun ChecklistList(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
         )
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
         ) {
             items(checklists) { c ->
                 Card(
@@ -437,6 +489,54 @@ fun ChecklistList(
                 }
             }
         }
+
+        // Banner "Dona un caffè"
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 32.dp,
+                    end = 32.dp,
+                    top = 16.dp,
+                    bottom = 100.dp
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .clickable { onDonate() }
+                    .padding(
+                        horizontal = 16.dp,
+                        vertical = 10.dp
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "☕",
+                    fontSize = 40.sp
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = stringResource(R.string.donate_banner_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Text(
+                    text = stringResource(R.string.donate_banner_message),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
     }
 }
 
@@ -471,7 +571,11 @@ fun ChecklistDetailScreen(
     Scaffold(
         topBar = {
             Column {
-                AppHeader()
+                AppHeader(
+                    onDonate = {
+                        // ...
+                    }
+                )
             }
         },
         floatingActionButton = {
@@ -861,7 +965,9 @@ fun EmptyCategoriesState(onCreateClick: () -> Unit) {
 
 /* ---------------- HEADER APP ---------------- */
 @Composable
-fun AppHeader() {
+fun AppHeader(
+    onDonate: () -> Unit
+) {
     var showMenu by remember { mutableStateOf(false) }
     var showInfoDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
@@ -921,6 +1027,19 @@ fun AppHeader() {
                     onClick = {
                         showMenu = false
                         showThemeDialog = true
+                    }
+                )
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.donate_coffee)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.LocalCafe,
+                            contentDescription = null
+                        )
+                    },
+                    onClick = {
+                        showMenu = false
+                        onDonate()
                     }
                 )
                 DropdownMenuItem(
