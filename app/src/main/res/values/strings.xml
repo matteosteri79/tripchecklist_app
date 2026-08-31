@@ -39,10 +39,10 @@
     <string name="choose_language">Scegli lingua</string>
     <string name="system_language">Lingua dispositivo</string>
     <string name="italian">Italiano</string>
-    <string name="english">Inglese</string>
-    <string name="french">Francese</string>
-    <string name="spanish">Spagnolo</string>
-    <string name="german">Tedesco</string>
+    <string name="english">English</string>
+    <string name="french">Français</string>
+    <string name="spanish">Español</string>
+    <string name="german">Deutsch</string>
     <string name="theme">Tema</string>
     <string name="choose_theme">Scegli tema</string>
 </resources>

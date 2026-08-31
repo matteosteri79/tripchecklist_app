@@ -38,11 +38,11 @@
     <string name="language">Langue</string>
     <string name="choose_language">Choisir la langue</string>
     <string name="system_language">Langue de l\'appareil</string>
-    <string name="italian">Italien</string>
-    <string name="english">Anglais</string>
+    <string name="italian">Italiano</string>
+    <string name="english">English</string>
     <string name="french">Français</string>
-    <string name="spanish">Espagnol</string>
-    <string name="german">Allemand</string>
+    <string name="spanish">Español</string>
+    <string name="german">Deutsch</string>
     <string name="theme">Thème</string>
     <string name="choose_theme">Choisir le thème</string>
 </resources>
